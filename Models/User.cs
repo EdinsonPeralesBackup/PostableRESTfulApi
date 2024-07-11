@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PostableRESTfulApi.Models
 {
@@ -29,5 +30,12 @@ namespace PostableRESTfulApi.Models
     
     [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
     public required DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    //RELATIONS
+    [JsonIgnore]
+    public List<Post> Posts { get; set; } = new List<Post>();
+
+    [JsonIgnore]
+    public List<Like> Likes { get; set; } = new List<Like>();
   }
 }

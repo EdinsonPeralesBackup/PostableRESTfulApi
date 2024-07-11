@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostableRESTfulApi.Data;
 
@@ -11,9 +12,11 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240711172239_PostAndUserIdsUniquesInLikeTable")]
+    partial class PostAndUserIdsUniquesInLikeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,112 +125,6 @@ namespace PostableRESTFulApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6447),
-                            Email = "edi_perales@neelvat.com",
-                            FirstName = "Edinson",
-                            LastName = "Perales",
-                            Password = "123456",
-                            Role = "Admin",
-                            UserName = "EdinsonPerales"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6468),
-                            FirstName = "John",
-                            LastName = "Doe",
-                            Password = "password1",
-                            Role = "User",
-                            UserName = "JohnDoe"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6471),
-                            Email = "jane_smith@example.com",
-                            Password = "password2",
-                            Role = "User",
-                            UserName = "JaneSmith"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6473),
-                            FirstName = "Mike",
-                            Password = "password3",
-                            Role = "User",
-                            UserName = "MikeBrown"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6475),
-                            LastName = "Connor",
-                            Password = "password4",
-                            Role = "Admin",
-                            UserName = "SaraConnor"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6477),
-                            Password = "password5",
-                            Role = "User",
-                            UserName = "TomHanks"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6478),
-                            Email = "emma_watson@example.com",
-                            FirstName = "Emma",
-                            LastName = "Watson",
-                            Password = "password6",
-                            Role = "User",
-                            UserName = "EmmaWatson"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6480),
-                            Email = "robert_downey@example.com",
-                            Password = "password7",
-                            Role = "User",
-                            UserName = "RobertDowney"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6481),
-                            FirstName = "Chris",
-                            Password = "password8",
-                            Role = "User",
-                            UserName = "ChrisEvans"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6483),
-                            LastName = "Johansson",
-                            Password = "password9",
-                            Role = "User",
-                            UserName = "ScarlettJohansson"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6484),
-                            FirstName = "Bruce",
-                            LastName = "Wayne",
-                            Password = "password10",
-                            Role = "User",
-                            UserName = "BruceWayne"
-                        });
                 });
 
             modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
