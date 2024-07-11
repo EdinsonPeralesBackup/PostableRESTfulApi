@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PostableRESTfulApi.Models
 {
@@ -16,5 +17,8 @@ namespace PostableRESTfulApi.Models
     //RELATIONS
     public required int UserId { get;set; }
     public required User User { get;set; }
+
+    [JsonIgnore]
+    public List<Like> Likes { get; set; } = new List<Like>();
   }
 }
