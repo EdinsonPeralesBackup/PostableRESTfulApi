@@ -34,5 +34,8 @@ namespace PostableRESTfulApi.Models
     //RELATIONS
     [JsonIgnore]
     public List<Post> Posts { get; set; } = new List<Post>();
+
+    [JsonIgnore]
+    public List<Like> Likes { get; set; } = new List<Like>();
   }
 }

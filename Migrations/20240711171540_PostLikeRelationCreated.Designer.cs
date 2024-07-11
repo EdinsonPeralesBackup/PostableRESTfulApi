@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostableRESTfulApi.Data;
 
@@ -11,9 +12,11 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240711171540_PostLikeRelationCreated")]
+    partial class PostLikeRelationCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,15 +39,9 @@ namespace PostableRESTFulApi.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("PostId", "UserId")
-                        .IsUnique();
+                    b.HasIndex("PostId");
 
                     b.ToTable("Likes");
                 });
@@ -129,18 +126,10 @@ namespace PostableRESTFulApi.Migrations
                     b.HasOne("PostableRESTfulApi.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("PostableRESTfulApi.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
@@ -148,7 +137,7 @@ namespace PostableRESTFulApi.Migrations
                     b.HasOne("PostableRESTfulApi.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -161,8 +150,6 @@ namespace PostableRESTFulApi.Migrations
 
             modelBuilder.Entity("PostableRESTfulApi.Models.User", b =>
                 {
-                    b.Navigation("Likes");
-
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
