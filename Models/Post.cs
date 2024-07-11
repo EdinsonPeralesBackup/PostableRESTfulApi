@@ -12,5 +12,9 @@ namespace PostableRESTfulApi.Models
     
     [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
     public required DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    //RELATIONS
+    public required int UserId { get;set; }
+    public required User User { get;set; }
   }
 }
