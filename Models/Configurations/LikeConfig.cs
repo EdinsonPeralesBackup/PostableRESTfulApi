@@ -7,7 +7,7 @@ namespace PostableRESTfulApi.Models.Configurations
   {
     public void Configure(EntityTypeBuilder<Like> builder)
     {
-        // builder.HasIndex(l => new { l.PostId, l.UserId }).IsUnique();
+        builder.HasIndex(l => new { l.PostId, l.UserId }).IsUnique();
     }
   }
 }
