@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PostableRESTfulApi.Data;
 using PostableRESTfulApi.Models;
+using PostableRESTfulApi.Models.DTOs.Post;
 
 namespace PostableRESTfulApi.Controllers
 {
@@ -81,6 +82,58 @@ namespace PostableRESTfulApi.Controllers
             };
 
             return Ok(response);
+        }
+
+        // GET: api/post/{{id}}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostById(int id)
+        {
+            var post = await _context.Posts
+                .Include(p => p.User) 
+                .Where(p => p.Id == id)
+                .Select(p => new 
+                {
+                    p.Id,
+                    p.Content,
+                    p.CreatedAt,
+                    User = new 
+                    {
+                        p.User.Id,
+                        p.User.UserName
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return Ok(post);
+        }
+
+        [Authorize]
+        [HttpPost("")]
+        public async Task<ActionResult<Post>> CreatePost([FromBody] CreatePostWithoutIdDto postDto)
+        {
+            var user = await _context.Users.FindAsync(postDto.UserId);            
+
+            if (user == null)
+            {
+                return BadRequest("El usuario no existe!!");
+                throw new InvalidOperationException();
+            }
+
+            var post = new Post
+            {
+                Content = postDto.Content,
+                User = user,
+                CreatedAt = postDto.CreatedAt ?? DateTime.Now,
+            };
+
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
 
         // [Authorize(Policy = "UserOnly")]
