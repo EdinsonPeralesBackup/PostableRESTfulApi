@@ -202,12 +202,20 @@ namespace PostableRESTfulApi.Controllers
             {
                 return NotFound($"ERROR: El post con id {postId} no existe!!");
                 throw new InvalidOperationException();
-            }  
+            } 
 
-            var userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+             // Verificar y mostrar todos los claims
+            var userClaims = User.Claims.ToList();
+            foreach (var claim in userClaims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            } 
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;           
+            Console.WriteLine($"User Id from token: {userId}");
             if (userId == null)
             {
-                return Unauthorized();
+                return Unauthorized("No se encontro el id del usuario autenticado");
             }
 
             var user = await _context.Users.FindAsync(int.Parse(userId));
