@@ -15,7 +15,7 @@ namespace PostableRESTfulApi.Models
     public required DateTime CreatedAt { get; set; } = DateTime.Now;
 
     //RELATIONS
-    public required int UserId { get;set; }
+    public int UserId { get;set; }
     public required User User { get;set; }
 
     [JsonIgnore]
