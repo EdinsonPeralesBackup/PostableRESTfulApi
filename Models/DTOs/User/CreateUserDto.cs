@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
 namespace PostableRESTfulApi.Models.DTOs.User
 {
   public class CreateUserDto
