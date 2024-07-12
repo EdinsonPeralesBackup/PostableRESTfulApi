@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PostableRESTFulApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93c9e3975855c1dd4bdcd2907db937cce497bacc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4debfaf196d2565bddd3da92823111c3319d28fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("PostableRESTFulApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PostableRESTFulApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

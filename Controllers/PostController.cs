@@ -119,7 +119,7 @@ namespace PostableRESTfulApi.Controllers
 
             if (user == null)
             {
-                return BadRequest("El usuario no existe!!");
+                return BadRequest($"ERROR: El usuario con id {postDto.UserId} no existe!!");
                 throw new InvalidOperationException();
             }
 
@@ -136,6 +136,48 @@ namespace PostableRESTfulApi.Controllers
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
 
+        // PUT: api/Book/{{id}}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutBook(int id, UpdatePostDto updatePostDto)
+        {
+            var post = await _context.Posts
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (post == null)
+            {
+                return BadRequest($"ERROR: El post con id {id} no existe");
+            }
+
+            if (updatePostDto.UserId.HasValue)
+            {
+                var user = await _context.Users.FindAsync(updatePostDto.UserId);
+                if (user == null)
+                {
+                    return BadRequest($"ERROR: El usuario con id {updatePostDto.UserId} no existe");
+                }
+                post.User = user;
+            }
+
+            if (updatePostDto.Content != null)
+            {
+                post.Content = updatePostDto.Content;
+            } 
+            await _context.SaveChangesAsync(); 
+
+            var updatedPost = new 
+            {
+                post.Id,
+                post.Content,
+                post.CreatedAt,
+                User = new 
+                {
+                    post.User.Id,
+                    post.User.UserName
+                }
+            };
+            return Ok(updatedPost);                          
+        }
         // [Authorize(Policy = "UserOnly")]
         // [HttpGet("user")]
         // public IActionResult GetUserProducts()
