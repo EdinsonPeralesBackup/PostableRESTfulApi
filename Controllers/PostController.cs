@@ -134,8 +134,18 @@ namespace PostableRESTfulApi.Controllers
 
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
+            
+            var postResponse = new 
+            {
+                content = postDto.Content,
+                user = new {
+                    id = user.Id,
+                    username = user.UserName
+                },
+                createdAt = postDto.CreatedAt ?? DateTime.Now,
+            };
 
-            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
+            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, postResponse);
         }
 
         // PUT: api/post/{{id}}
