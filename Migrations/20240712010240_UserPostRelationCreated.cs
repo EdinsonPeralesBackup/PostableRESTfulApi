@@ -5,46 +5,45 @@
 namespace PostableRESTFulApi.Migrations
 {
     /// <inheritdoc />
-    public partial class PostLikeRelationCreated : Migration
+    public partial class UserPostRelationCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "PostId",
-                table: "Likes",
+                name: "UserId",
+                table: "Posts",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_PostId",
-                table: "Likes",
-                column: "PostId");
+                name: "IX_Posts_UserId",
+                table: "Posts",
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Likes_Posts_PostId",
-                table: "Likes",
-                column: "PostId",
-                principalTable: "Posts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                name: "FK_Posts_Users_UserId",
+                table: "Posts",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Likes_Posts_PostId",
-                table: "Likes");
+                name: "FK_Posts_Users_UserId",
+                table: "Posts");
 
             migrationBuilder.DropIndex(
-                name: "IX_Likes_PostId",
-                table: "Likes");
+                name: "IX_Posts_UserId",
+                table: "Posts");
 
             migrationBuilder.DropColumn(
-                name: "PostId",
-                table: "Likes");
+                name: "UserId",
+                table: "Posts");
         }
     }
 }

@@ -27,8 +27,7 @@ namespace PostableRESTFulApi.Migrations
                 table: "Likes",
                 column: "UserId",
                 principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />

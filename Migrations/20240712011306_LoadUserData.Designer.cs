@@ -12,7 +12,7 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711222444_LoadUserData")]
+    [Migration("20240712011306_LoadUserData")]
     partial class LoadUserData
     {
         /// <inheritdoc />
@@ -24,6 +24,33 @@ namespace PostableRESTFulApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("PostId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("Likes");
+                });
 
             modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
                 {
@@ -41,7 +68,12 @@ namespace PostableRESTFulApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -98,7 +130,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6447),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2607),
                             Email = "edi_perales@neelvat.com",
                             FirstName = "Edinson",
                             LastName = "Perales",
@@ -109,7 +141,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6468),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2626),
                             FirstName = "John",
                             LastName = "Doe",
                             Password = "password1",
@@ -119,7 +151,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6471),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2627),
                             Email = "jane_smith@example.com",
                             Password = "password2",
                             Role = "User",
@@ -128,7 +160,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6473),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2629),
                             FirstName = "Mike",
                             Password = "password3",
                             Role = "User",
@@ -137,7 +169,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6475),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2631),
                             LastName = "Connor",
                             Password = "password4",
                             Role = "Admin",
@@ -146,7 +178,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6477),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2632),
                             Password = "password5",
                             Role = "User",
                             UserName = "TomHanks"
@@ -154,7 +186,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6478),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2633),
                             Email = "emma_watson@example.com",
                             FirstName = "Emma",
                             LastName = "Watson",
@@ -165,7 +197,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6480),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2635),
                             Email = "robert_downey@example.com",
                             Password = "password7",
                             Role = "User",
@@ -174,7 +206,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6481),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2636),
                             FirstName = "Chris",
                             Password = "password8",
                             Role = "User",
@@ -183,7 +215,7 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6483),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2638),
                             LastName = "Johansson",
                             Password = "password9",
                             Role = "User",
@@ -192,13 +224,55 @@ namespace PostableRESTFulApi.Migrations
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2024, 7, 11, 17, 24, 43, 481, DateTimeKind.Local).AddTicks(6484),
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2639),
                             FirstName = "Bruce",
                             LastName = "Wayne",
                             Password = "password10",
                             Role = "User",
                             UserName = "BruceWayne"
                         });
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
+                {
+                    b.HasOne("PostableRESTfulApi.Models.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PostableRESTfulApi.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
+                {
+                    b.HasOne("PostableRESTfulApi.Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
+                {
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.User", b =>
+                {
+                    b.Navigation("Likes");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }
