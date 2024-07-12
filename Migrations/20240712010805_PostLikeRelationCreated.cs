@@ -5,46 +5,45 @@
 namespace PostableRESTFulApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UserPostRelationCreated : Migration
+    public partial class PostLikeRelationCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "UserId",
-                table: "Posts",
+                name: "PostId",
+                table: "Likes",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId",
-                table: "Posts",
-                column: "UserId");
+                name: "IX_Likes_PostId",
+                table: "Likes",
+                column: "PostId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Posts_Users_UserId",
-                table: "Posts",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                name: "FK_Likes_Posts_PostId",
+                table: "Likes",
+                column: "PostId",
+                principalTable: "Posts",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Posts_Users_UserId",
-                table: "Posts");
+                name: "FK_Likes_Posts_PostId",
+                table: "Likes");
 
             migrationBuilder.DropIndex(
-                name: "IX_Posts_UserId",
-                table: "Posts");
+                name: "IX_Likes_PostId",
+                table: "Likes");
 
             migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Posts");
+                name: "PostId",
+                table: "Likes");
         }
     }
 }

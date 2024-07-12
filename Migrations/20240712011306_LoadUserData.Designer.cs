@@ -12,8 +12,8 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711172239_PostAndUserIdsUniquesInLikeTable")]
-    partial class PostAndUserIdsUniquesInLikeTable
+    [Migration("20240712011306_LoadUserData")]
+    partial class LoadUserData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,6 +125,112 @@ namespace PostableRESTFulApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2607),
+                            Email = "edi_perales@neelvat.com",
+                            FirstName = "Edinson",
+                            LastName = "Perales",
+                            Password = "123456",
+                            Role = "Admin",
+                            UserName = "EdinsonPerales"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2626),
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Password = "password1",
+                            Role = "User",
+                            UserName = "JohnDoe"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2627),
+                            Email = "jane_smith@example.com",
+                            Password = "password2",
+                            Role = "User",
+                            UserName = "JaneSmith"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2629),
+                            FirstName = "Mike",
+                            Password = "password3",
+                            Role = "User",
+                            UserName = "MikeBrown"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2631),
+                            LastName = "Connor",
+                            Password = "password4",
+                            Role = "Admin",
+                            UserName = "SaraConnor"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2632),
+                            Password = "password5",
+                            Role = "User",
+                            UserName = "TomHanks"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2633),
+                            Email = "emma_watson@example.com",
+                            FirstName = "Emma",
+                            LastName = "Watson",
+                            Password = "password6",
+                            Role = "User",
+                            UserName = "EmmaWatson"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2635),
+                            Email = "robert_downey@example.com",
+                            Password = "password7",
+                            Role = "User",
+                            UserName = "RobertDowney"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2636),
+                            FirstName = "Chris",
+                            Password = "password8",
+                            Role = "User",
+                            UserName = "ChrisEvans"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2638),
+                            LastName = "Johansson",
+                            Password = "password9",
+                            Role = "User",
+                            UserName = "ScarlettJohansson"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2024, 7, 11, 20, 13, 5, 730, DateTimeKind.Local).AddTicks(2639),
+                            FirstName = "Bruce",
+                            LastName = "Wayne",
+                            Password = "password10",
+                            Role = "User",
+                            UserName = "BruceWayne"
+                        });
                 });
 
             modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>

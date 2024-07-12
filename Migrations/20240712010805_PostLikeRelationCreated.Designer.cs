@@ -12,8 +12,8 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711152139_PostEntityCreatedUserEntityUpdated")]
-    partial class PostEntityCreatedUserEntityUpdated
+    [Migration("20240712010805_PostLikeRelationCreated")]
+    partial class PostLikeRelationCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,32 @@ namespace PostableRESTFulApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
+                });
 
             modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
                 {
@@ -41,7 +67,12 @@ namespace PostableRESTFulApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -93,6 +124,48 @@ namespace PostableRESTFulApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
+                {
+                    b.HasOne("PostableRESTfulApi.Models.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PostableRESTfulApi.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
+                {
+                    b.HasOne("PostableRESTfulApi.Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
+                {
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("PostableRESTfulApi.Models.User", b =>
+                {
+                    b.Navigation("Likes");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

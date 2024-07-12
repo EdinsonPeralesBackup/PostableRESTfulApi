@@ -12,8 +12,8 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711171833_UserLikeRelationCreated")]
-    partial class UserLikeRelationCreated
+    [Migration("20240712010240_UserPostRelationCreated")]
+    partial class UserPostRelationCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,17 +36,7 @@ namespace PostableRESTFulApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -126,45 +116,19 @@ namespace PostableRESTFulApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
-                {
-                    b.HasOne("PostableRESTfulApi.Models.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PostableRESTfulApi.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
                 {
                     b.HasOne("PostableRESTfulApi.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
-                {
-                    b.Navigation("Likes");
-                });
-
             modelBuilder.Entity("PostableRESTfulApi.Models.User", b =>
                 {
-                    b.Navigation("Likes");
-
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
