@@ -253,5 +253,47 @@ namespace PostableRESTfulApi.Controllers
             };
             return Ok(new { message = "Like registrado.", likeResponse });         
         }
+
+        [Authorize]
+        [HttpDelete("{postId}/like")]
+        public async Task<IActionResult> DeleteLike(int postId)
+        {
+            var post = await _context.Posts.FindAsync(postId); 
+
+            if (post == null)
+            {
+                return NotFound($"El post con id {postId} no existe!!!");
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            if (userId == null)
+            {
+                return Unauthorized("No se encontro el id del usuario autenticado");
+            }
+
+            var user = await _context.Users.FindAsync(int.Parse(userId));
+            if (user == null)
+            {
+                return Unauthorized("El usuario autenticado no existe en el sistema.");
+            }
+
+            var like = await _context.Likes
+                .FirstOrDefaultAsync(l => l.UserId == user.Id && l.PostId == post.Id);
+            if (like == null)
+            {
+                return NotFound($"El post no tenía like anteriormente!!!");
+            }
+
+            _context.Remove(like);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest($"ERROR: {ex.Message}");
+            }
+            return Ok(new { message = "Like Eliminado."});
+        }
     }
 }
