@@ -204,15 +204,7 @@ namespace PostableRESTfulApi.Controllers
                 throw new InvalidOperationException();
             } 
 
-             // Verificar y mostrar todos los claims
-            var userClaims = User.Claims.ToList();
-            foreach (var claim in userClaims)
-            {
-                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-            } 
-
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;           
-            Console.WriteLine($"User Id from token: {userId}");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (userId == null)
             {
                 return Unauthorized("No se encontro el id del usuario autenticado");
@@ -229,16 +221,7 @@ namespace PostableRESTfulApi.Controllers
                 Post = post,
                 User = user,
                 CreatedAt = DateTime.Now
-            };
-
-            var likeResponse = new 
-            {
-                id = like.Id,
-                content = post.Content,
-                createdAt = like.CreatedAt,
-                username = user.UserName,
-                likesCount = post.Likes.Count
-            };
+            };            
 
             _context.Likes.Add(like);
             
@@ -259,6 +242,15 @@ namespace PostableRESTfulApi.Controllers
                     return StatusCode(500, "Ocurrió un error al registrar el like.");
                 }
             }
+
+            var likeResponse = new 
+            {
+                id = like.Id,
+                content = post.Content,
+                createdAt = like.CreatedAt,
+                username = user.UserName,
+                likesCount = like.Post.Likes.Count
+            };
             return Ok(new { message = "Like registrado.", likeResponse });         
         }
     }
