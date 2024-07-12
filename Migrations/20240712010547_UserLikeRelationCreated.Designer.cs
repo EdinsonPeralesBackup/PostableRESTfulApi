@@ -12,8 +12,8 @@ using PostableRESTfulApi.Data;
 namespace PostableRESTFulApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711161313_UserPostRelationCreated")]
-    partial class UserPostRelationCreated
+    [Migration("20240712010547_UserLikeRelationCreated")]
+    partial class UserLikeRelationCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,12 @@ namespace PostableRESTFulApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -116,12 +121,23 @@ namespace PostableRESTFulApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("PostableRESTfulApi.Models.Like", b =>
+                {
+                    b.HasOne("PostableRESTfulApi.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PostableRESTfulApi.Models.Post", b =>
                 {
                     b.HasOne("PostableRESTfulApi.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -129,6 +145,8 @@ namespace PostableRESTFulApi.Migrations
 
             modelBuilder.Entity("PostableRESTfulApi.Models.User", b =>
                 {
+                    b.Navigation("Likes");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
