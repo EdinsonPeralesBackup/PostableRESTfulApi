@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace PostableRESTfulApi.Models
+namespace PostableRESTfulApi.Models.DTOs.User
 {
-  public class User
+  public class CreateUserWithoutIdDto
   {
-    public int Id { get; set; }
-    
     [Required(ErrorMessage = "El nombre de usuario es obligatorio.")]
     [MaxLength(100, ErrorMessage = "El nombre de usuario no puede tener más de 100 caracteres.")]
     public required string UserName { get; set; }
@@ -26,16 +23,9 @@ namespace PostableRESTfulApi.Models
     
     [Required(ErrorMessage = "El rol es obligatorio.")]
     [MaxLength(10, ErrorMessage = "El rol no puede tener más de 10 caracteres.")]
-    public required string Role { get; set; } = "User";
+    public string? Role { get; set; } = "User";
     
     [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
-    public required DateTime CreatedAt { get; set; } = DateTime.Now;
-
-    //RELATIONS
-    [JsonIgnore]
-    public List<Post> Posts { get; set; } = new List<Post>();
-
-    [JsonIgnore]
-    public List<Like> Likes { get; set; } = new List<Like>();
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
   }
 }
