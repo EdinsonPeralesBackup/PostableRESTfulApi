@@ -136,9 +136,10 @@ namespace PostableRESTfulApi.Controllers
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
 
-        // PUT: api/Book/{{id}}
+        // PUT: api/post/{{id}}
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(int id, UpdatePostDto updatePostDto)
+        public async Task<IActionResult> UpdatePost(int id, UpdatePostDto updatePostDto)
         {
             var post = await _context.Posts
                 .Include(p => p.User)
