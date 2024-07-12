@@ -26,7 +26,7 @@ namespace PostableRESTfulApi.Models
     
     [Required(ErrorMessage = "El rol es obligatorio.")]
     [MaxLength(10, ErrorMessage = "El rol no puede tener más de 10 caracteres.")]
-    public required string Role { get; set; } = "user";
+    public required string Role { get; set; } = "User";
     
     [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
     public required DateTime CreatedAt { get; set; } = DateTime.Now;
