@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PostableRESTFulApi.Migrations
 {
     /// <inheritdoc />
-    public partial class PostEntityCreatedUserEntityUpdated : Migration
+    public partial class PostEntityCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
