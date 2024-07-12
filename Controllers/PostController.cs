@@ -1,5 +1,7 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PostableRESTfulApi.Data;
 using PostableRESTfulApi.Models;
@@ -147,7 +149,7 @@ namespace PostableRESTfulApi.Controllers
 
             if (post == null)
             {
-                return BadRequest($"ERROR: El post con id {id} no existe");
+                return NotFound($"ERROR: El post con id {id} no existe");
             }
 
             if (updatePostDto.UserId.HasValue)
@@ -177,23 +179,69 @@ namespace PostableRESTfulApi.Controllers
                     post.User.UserName
                 }
             };
-            return Ok(updatedPost);                          
+            return Ok(new { message = "Post Actualizado.", updatedPost });                          
         }
-        // [Authorize(Policy = "UserOnly")]
-        // [HttpGet("user")]
-        // public IActionResult GetUserProducts()
-        // {
-        //     var products = _context.Products.ToList();
-        //     return Ok(products);
-        // }
 
-        // [Authorize(Policy = "AdminOnly")]
-        // [HttpPost("admin")]
-        // public IActionResult CreateProduct([FromBody] Product product)
-        // {
-        //     _context.Products.Add(product);
-        //     _context.SaveChanges();
-        //     return Ok(new { message = "Product created successfully" });
-        // }
+        [Authorize]
+        [HttpPost("{postId}/like")]
+        public async Task<IActionResult> GiveLike(int postId)
+        {
+            var post = await _context.Posts.FindAsync(postId);            
+
+            if (post == null)
+            {
+                return NotFound($"ERROR: El post con id {postId} no existe!!");
+                throw new InvalidOperationException();
+            }  
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _context.Users.FindAsync(int.Parse(userId));
+            if (user == null)
+            {
+                return Unauthorized("El usuario autenticado no existe en el sistema.");
+            }
+
+            var like = new Like
+            {
+                Post = post,
+                User = user,
+                CreatedAt = DateTime.Now
+            };
+
+            var likeResponse = new 
+            {
+                id = like.Id,
+                content = post.Content,
+                createdAt = like.CreatedAt,
+                username = user.UserName,
+                likesCount = post.Likes.Count
+            };
+
+            _context.Likes.Add(like);
+            
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
+                {
+                    // Error 2627 es para violación de clave única en SQL Server
+                    return BadRequest("El usuario ya ha dado like a este post.");
+                }
+                else
+                {
+                    // Manejar otros errores de actualización de base de datos
+                    return StatusCode(500, "Ocurrió un error al registrar el like.");
+                }
+            }
+            return Ok(new { message = "Like registrado.", likeResponse });         
+        }
     }
 }
