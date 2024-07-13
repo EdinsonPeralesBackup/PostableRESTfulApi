@@ -250,3 +250,13 @@ Posteable - RESTfulAPI permite a los usuarios interactuar con publicaciones (Pos
     }
     ```
 ### Formato de respuesta de error
+```json
+{
+  "status": 404,
+  "error": "Not Found",
+  "message": "El recurso solicitado no se encontró.",
+  "details": "El post con id 123 no existe.",
+  "timestamp": "2024-07-12T12:34:56Z",
+  "path": "/api/posts/123"
+}
+```
