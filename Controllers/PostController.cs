@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using PostableRESTfulApi.Controllers.Error;
 using PostableRESTfulApi.Data;
 using PostableRESTfulApi.Models;
 using PostableRESTfulApi.Models.DTOs.Post;
@@ -200,20 +201,19 @@ namespace PostableRESTfulApi.Controllers
 
             if (post == null)
             {
-                return NotFound($"ERROR: El post con id {postId} no existe!!");
-                throw new InvalidOperationException();
+                return ErrorHelper.ErrorResponse(this, 404, "Not Found", $"El post con id {postId} no existe!!");
             } 
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (userId == null)
             {
-                return Unauthorized("No se encontro el id del usuario autenticado");
+                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "No se encontro el id del usuario autenticado");
             }
 
             var user = await _context.Users.FindAsync(int.Parse(userId));
             if (user == null)
             {
-                return Unauthorized("El usuario autenticado no existe en el sistema.");
+                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "El usuario autenticado no existe en el sistema.");
             }
 
             var like = new Like
@@ -233,13 +233,11 @@ namespace PostableRESTfulApi.Controllers
             {
                 if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
                 {
-                    // Error 2627 es para violación de clave única en SQL Server
-                    return BadRequest("El usuario ya ha dado like a este post.");
+                    return ErrorHelper.ErrorResponse(this, 400, "Bad Request", "El usuario ya ha dado like a este post.");                
                 }
                 else
                 {
-                    // Manejar otros errores de actualización de base de datos
-                    return StatusCode(500, "Ocurrió un error al registrar el like.");
+                    return ErrorHelper.ErrorResponse(this, 500, "Internal Server Error", "Ocurrió un error al registrar el like.");
                 }
             }
 
@@ -262,26 +260,26 @@ namespace PostableRESTfulApi.Controllers
 
             if (post == null)
             {
-                return NotFound($"El post con id {postId} no existe!!!");
+                return ErrorHelper.ErrorResponse(this, 404, "Not Found", $"El post con id {postId} no existe!!");
             }
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (userId == null)
             {
-                return Unauthorized("No se encontro el id del usuario autenticado");
+                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "No se encontro el id del usuario autenticado");
             }
 
             var user = await _context.Users.FindAsync(int.Parse(userId));
             if (user == null)
             {
-                return Unauthorized("El usuario autenticado no existe en el sistema.");
+                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "El usuario autenticado no existe en el sistema.");                
             }
 
             var like = await _context.Likes
                 .FirstOrDefaultAsync(l => l.UserId == user.Id && l.PostId == post.Id);
             if (like == null)
             {
-                return NotFound($"El post no tenía like anteriormente!!!");
+                return ErrorHelper.ErrorResponse(this, 404, "Not Found", "El post no tenía like anteriormente!!!");
             }
 
             _context.Remove(like);
@@ -291,7 +289,7 @@ namespace PostableRESTfulApi.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest($"ERROR: {ex.Message}");
+                return ErrorHelper.ErrorResponse(this, 500, "Internal Server Error", ex.Message);
             }
             return Ok(new { message = "Like Eliminado."});
         }
