@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PostableRESTfulApi.Data;
 using Microsoft.OpenApi.Models;
+using PostableRESTfulApi.Middelwares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +100,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<CustomAuthenticationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

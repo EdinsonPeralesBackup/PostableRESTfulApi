@@ -21,6 +21,7 @@ namespace PostableRESTfulApi.Controllers
             _context = context;
         }
 
+        // GET: api/post
         [HttpGet("")]
         public async Task<IActionResult> GetPosts(
             string username = "", 
@@ -109,21 +110,21 @@ namespace PostableRESTfulApi.Controllers
 
             if (post == null)
             {
-                return NotFound();
+                return ErrorHelper.ErrorResponse(this, 404, "Not Found", $"El post con id {id} no existe!!");
             }
             return Ok(post);
         }
 
+        // GET: api/post/{{id}}
         [Authorize]
         [HttpPost("")]
-        public async Task<ActionResult<Post>> CreatePost([FromBody] CreatePostWithoutIdDto postDto)
+        public async Task<IActionResult> CreatePost([FromBody] CreatePostWithoutIdDto postDto)
         {
             var user = await _context.Users.FindAsync(postDto.UserId);            
 
             if (user == null)
             {
-                return BadRequest($"ERROR: El usuario con id {postDto.UserId} no existe!!");
-                throw new InvalidOperationException();
+                return ErrorHelper.ErrorResponse(this, 400, "Bad Request", $"El usuario con id {postDto.UserId} no existe.");                                    
             }
 
             var post = new Post
@@ -160,7 +161,7 @@ namespace PostableRESTfulApi.Controllers
 
             if (post == null)
             {
-                return NotFound($"ERROR: El post con id {id} no existe");
+                return ErrorHelper.ErrorResponse(this, 404, "Not Found", $"ERROR: El post con id {id} no existe");                
             }
 
             if (updatePostDto.UserId.HasValue)
@@ -168,7 +169,7 @@ namespace PostableRESTfulApi.Controllers
                 var user = await _context.Users.FindAsync(updatePostDto.UserId);
                 if (user == null)
                 {
-                    return BadRequest($"ERROR: El usuario con id {updatePostDto.UserId} no existe");
+                    return ErrorHelper.ErrorResponse(this, 400, "Bad Request", $"El usuario con id {updatePostDto.UserId} no existe.");                                    
                 }
                 post.User = user;
             }
@@ -193,6 +194,7 @@ namespace PostableRESTfulApi.Controllers
             return Ok(new { message = "Post Actualizado.", updatedPost });                          
         }
 
+        // POST: api/{postId}/like
         [Authorize]
         [HttpPost("{postId}/like")]
         public async Task<IActionResult> GiveLike(int postId)
@@ -252,6 +254,7 @@ namespace PostableRESTfulApi.Controllers
             return Ok(new { message = "Like registrado.", likeResponse });         
         }
 
+        // DELETE: api/{postId}/like
         [Authorize]
         [HttpDelete("{postId}/like")]
         public async Task<IActionResult> DeleteLike(int postId)

@@ -22,6 +22,7 @@ namespace PostableRESTfulApi.Controllers
             _context = context;
         }
 
+        // GET: api/me
         [Authorize]
         [HttpGet("")]
         public async Task<IActionResult> GetUser()

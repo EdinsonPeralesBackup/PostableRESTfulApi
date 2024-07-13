@@ -24,6 +24,7 @@ namespace PostableRESTfulApi.Controllers
             _context = context;
         }
 
+        // POST: api/auth/signup
         [HttpPost("signup")]
         public async Task<IActionResult> Register([FromBody] CreateUserWithoutIdDto userDto)
         {
@@ -53,6 +54,7 @@ namespace PostableRESTfulApi.Controllers
             }
         }
 
+        // POST: api/auth/login
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginUserDto loginUserDto)
         {
