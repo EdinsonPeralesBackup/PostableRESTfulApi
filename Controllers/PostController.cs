@@ -233,7 +233,7 @@ namespace PostableRESTfulApi.Controllers
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
+                if (ex.InnerException is SqlException sqlException && (sqlException.Number == 2627 || sqlException.Number == 2601))
                 {
                     return ErrorHelper.ErrorResponse(this, 400, "Bad Request", "El usuario ya ha dado like a este post.");                
                 }
