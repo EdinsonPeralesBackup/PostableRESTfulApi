@@ -1,4 +1,4 @@
-# Guía de usos: Postable - RESTful API para Gestión de Posts
+# Guía de uso: Postable - RESTful API para Gestión de Posts
 
 ### Introducción
 
