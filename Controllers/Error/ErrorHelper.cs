@@ -13,7 +13,7 @@ namespace PostableRESTfulApi.Controllers.Error
                 message,
                 details,
                 timestamp = DateTime.UtcNow,
-                path = controller.HttpContext.Request.Path
+                path = controller.Request?.Path.Value
             };
 
             return controller.StatusCode(statusCode, errorResponse);

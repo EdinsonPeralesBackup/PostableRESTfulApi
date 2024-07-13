@@ -63,7 +63,7 @@ namespace PostableRESTfulApi.Controllers
                 && u.Password == loginUserDto.Password);
             if (user == null)
             {
-                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "Usuario y/o contraseña incorrectas");
+                return BadRequest("Usuario y/o contraseña incorrecta");
             }
 
             var claims = new[]
