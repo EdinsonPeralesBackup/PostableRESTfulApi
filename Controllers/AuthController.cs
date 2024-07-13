@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PostableRESTfulApi.Controllers.Error;
 using PostableRESTfulApi.Data;
 using PostableRESTfulApi.Models;
 using PostableRESTfulApi.Models.DTOs.User;
@@ -26,9 +27,7 @@ namespace PostableRESTfulApi.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> Register([FromBody] CreateUserWithoutIdDto userDto)
         {
-            try
-            {
-                var user = new User
+            var user = new User
                 {
                     UserName  = userDto.UserName,
                     Password  = userDto.Password,
@@ -38,19 +37,19 @@ namespace PostableRESTfulApi.Controllers
                     Role      = userDto.Role ?? "User",
                     CreatedAt = userDto.CreatedAt ?? DateTime.Now
                 };
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            try
+            {
+                await _context.SaveChangesAsync();                    
                 return Ok(new { message = "User registered successfully", user });
             }
             catch (DbUpdateException ex) when ((ex.InnerException as Microsoft.Data.SqlClient.SqlException)?.Number == 2601)
             {
-                return BadRequest($"ERRPR: El nombre del usuario ya esta en uso.");
-                throw;
+                return ErrorHelper.ErrorResponse(this,400,"Bad request","El nombre del usuario ya esta en uso.");                
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest($"ERROR: {ex.Message} ");
-                throw;
+                return ErrorHelper.ErrorResponse(this,400,"Bad request",ex.Message);                
             }
         }
 
@@ -62,7 +61,7 @@ namespace PostableRESTfulApi.Controllers
                 && u.Password == loginUserDto.Password);
             if (user == null)
             {
-                return Unauthorized();
+                return ErrorHelper.ErrorResponse(this, 401, "Unauthorized", "Usuario y/o contraseña incorrectas");
             }
 
             var claims = new[]
@@ -83,13 +82,6 @@ namespace PostableRESTfulApi.Controllers
                 signingCredentials: creds);
 
             return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
-        }
-
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            // Implementación de logout si es necesario
-            return Ok(new { message = "User logged out successfully" });
         }
     }
 }
